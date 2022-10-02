@@ -6,8 +6,9 @@ import App from './App.vue'
 
 const app = createApp(App)
 app.use(VueAxios, axios)
+app.use(router)
 if(import.meta.env.DEV) {
-    axios.defaults.baseURL = 'http://127.0.0.1:3000/apivue'
+    axios.defaults.baseURL = 'http://127.0.0.1:5000/apivue'
     console.log('正处于开发模式下')
 } else {
     axios.defaults.baseURL = 'https://www.dutbit.com/apivue'
