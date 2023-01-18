@@ -3,6 +3,7 @@
   <div style="height: 5rem;"></div>
   <!--解决tabbar的遮盖内容问题-->
   <van-tabbar route v-model="active">
+    <van-tabbar-item replace to="/postcard" icon="photo-o">元旦贺卡</van-tabbar-item>
     <van-tabbar-item replace to="/enroll" icon="friends-o">招新报名</van-tabbar-item>
   </van-tabbar>
 </template>
@@ -27,7 +28,11 @@ body,
   height: 100%;
   width: 100%;
   margin: 0px;
-  background-color: #DFF6FD;
+  /* background-color: #DFF6FD; */
+}
+
+html {
+  background-color: rgba(255, 0, 0, 0.2);
 }
 
 .container {
@@ -78,7 +83,6 @@ h3 {
   border: 2px inset cyan;
   padding: 6px 10px;
   border-radius: 3rem;/*50%;*/
-  background-color:balck;
   color: #0073bb;
 }
 h4 {

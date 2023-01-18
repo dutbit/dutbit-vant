@@ -59,7 +59,7 @@
 </template>
   
 <script>
-import { Dialog, Notify } from 'vant'
+import { showNotify, showConfirmDialog } from 'vant'
 import 'vant/es/dialog/style'
 import 'vant/es/notify/style'
 import axios from 'axios'
@@ -113,7 +113,7 @@ export default {
                 })
                 if (turns.length == 0) {
                     noticeText.value = '很遗憾，现在并不在报名时间内'
-                    Notify({ type: 'danger', message: '不在报名时间内' })
+                    showNotify({ type: 'danger', message: '不在报名时间内' })
                 } else {
                     let turn = turns[0]
                     currentTurn.id = turn.id
@@ -125,7 +125,7 @@ export default {
                 }
             })
             .catch(() => {
-                Notify({ type: 'danger', message: '无法获取报名批次，请联系管理员' })
+                showNotify({ type: 'danger', message: '无法获取报名批次，请联系管理员' })
             })
         axios
             .get('/enroll/getDepts')
@@ -135,7 +135,7 @@ export default {
                 })
             })
             .catch(() => {
-                Notify({ type: 'danger', message: '无法获取部门名单，请联系管理员' })
+                showNotify({ type: 'danger', message: '无法获取部门名单，请联系管理员' })
             })
 
         let showFacultyPicker = ref(false)
@@ -150,11 +150,11 @@ export default {
 
         const onSubmit = () => {
             if (!currentTurn.activated) {
-                Notify({ type: 'danger', message: '不在报名时间内' })
+                showNotify({ type: 'danger', message: '不在报名时间内' })
                 return
             }
             if (!signupForm.firstChoice) {
-                Notify({ type: 'danger', message: '请选择至少一个志愿！' })
+                showNotify({ type: 'danger', message: '请选择至少一个志愿！' })
                 return
             }
             // 注意，提交的数据与后端保持统一
@@ -183,11 +183,12 @@ export default {
                     .post('/enroll/submit', signupData)
                     .then((response) => {
                         if (response.data.success) {
-                            Notify({ type: 'success', message: '已提交报名表！' })
+                            Dialog.alert({ message: '已提交报名表！' })
+                            showNotify({ type: 'success', message: '已提交报名表！' })
                         }
                     })
                     .catch(() => {
-                        Notify({
+                        showNotify({
                             type: 'danger',
                             message: '无法提交报名表，请联系管理员',
                         })
@@ -197,7 +198,7 @@ export default {
                 console.log(response.data)
                 if (!response.data.unique) {
                     const time = response.data.time
-                    Dialog.confirm({
+                    showConfirmDialog({
                         title: '重要提示',
                         message: `在${time},你已经提交了一份姓名或学号相同的报名表，再次提交将覆盖原有的报名表，是否继续？`,
                     })
@@ -206,7 +207,7 @@ export default {
                             submitForm()
                         })
                         .catch(() => {
-                            Notify({
+                            showNotify({
                                 type: 'primary',
                                 message: '已放弃提交~',
                             })
@@ -273,7 +274,7 @@ export default {
 }
 </script>
   
-<style>
+<style scoped>
 
 </style>
   
