@@ -22,21 +22,27 @@
     <van-picker :columns="titleColumns" @confirm="onTitleConfirm" @cancel="showTitlePicker = false"></van-picker>
   </van-popup>
   <van-row style="margin-top: 10px" align="center" justify="center">
-    <van-col :span="7"><van-button type="success" class="gen-button"
+    <van-col :span="8"><van-button type="success" class="gen-button"
         @click="genMediaCard">生成视频贺卡</van-button></van-col>
   </van-row>
   <van-overlay :show="showMakingOverlay">
     <div class="wrapper">
-      <div class="block">
-        <van-loading v-show="!canDownload" type="spinner" style="display: flex; align-items: center;flex-direction: column; margin-top: 40px;" vertical>
+      <div :class="{'block': canDownload, 'loading-block': !canDownload}">
+        <van-loading v-show="!canDownload" type="spinner" style="display: flex; align-items: center; flex-direction: column; margin-top: 40px;" vertical>
           <span>正在制作,请耐心等待~</span>
           <br />
           <span>预计需要20秒</span>
         </van-loading>
         <video class="preview" ref="preview" controls v-show="canDownload" :src="downloadMediaUrl">
         </video>
-        <a style="margin-top: 50px; font-size:larger" v-show="canDownload" :href="downloadMediaUrl" @click="showMakingOverlay = false; canDownload = false">点我下载动态视频</a>
-        <a style="margin-top: 50px; font-size:larger" v-show="canDownload" :href="downloadImageUrl" @click="showMakingOverlay = false; canDownload = false">点我下载静态贺卡</a>
+        <van-row justify="center" style="margin-top: 20px; width: 100%">
+          <van-col :span="8" style="display: flex; flex-direction: column; align-items: center;">
+            <a style="font-size:larger; width: 100%; text-align: center;" v-show="canDownload" :href="downloadMediaUrl" @click="showMakingOverlay = false; canDownload = false">点我下载动态视频</a>
+          </van-col>
+          <van-col :span="8" style="display: flex; flex-direction: column; align-items: center;">
+            <a style="font-size:larger; width: 100%; text-align: center;" v-show="canDownload" :href="downloadImageUrl" @click="showMakingOverlay = false; canDownload = false">点我下载静态贺卡</a>
+          </van-col>
+        </van-row>
       </div>
     </div>
   </van-overlay>
@@ -47,6 +53,7 @@
 
 <script>
 import axios from 'axios'
+import { nanoid } from 'nanoid'
 import { ref, reactive, computed, onMounted } from 'vue'
 import { showToast, showNotify, showSuccessToast, showFailToast } from 'vant'
 export default {
@@ -114,7 +121,8 @@ export default {
         title: wishData.title,
         name: wishData.name,
         imgName: wishData.imgName,
-        wishTexts: wishData.wishTexts
+        wishTexts: wishData.wishTexts,
+        uuid: nanoid(12)
       }).then((res) => {
         console.log('回复', res)
         if (res.data.success) {
@@ -184,7 +192,7 @@ export default {
 
 .block {
   width: 80vw;
-  height: 80vw;
+  height: 60vw;
   border-radius: 15px;
   background-color: #fff;
   display: flex;
@@ -192,6 +200,15 @@ export default {
   flex-direction: column;
 }
 
+.loading-block {
+  width: 35vw;
+  height: 35vw;
+  border-radius: 15px;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
 .preview {
   width: 100%;
   margin-top: 10px;

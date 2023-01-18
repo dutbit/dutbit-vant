@@ -12,6 +12,7 @@
     "@vant/compat": "^1.0.0",
     "@vant/touch-emulator": "^1.4.0",
     "axios": "^0.27.2",
+    "nanoid": "^4.0.0",
     "unplugin-vue-components": "^0.22.7",
     "vant": "^4.0.3",
     "video.js": "^7.20.3",
