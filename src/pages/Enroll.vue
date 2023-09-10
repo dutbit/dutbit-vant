@@ -254,7 +254,52 @@ export default {
                 }
             })
         )
-        let depts = reactive({ data: [] })
+        let depts = reactive({
+            data: [
+                {
+                    text: '校团委组织部',
+                    value: '校团委组织部',
+                    children: [{ text: '', value: '' }], // 需使用空字符串进行占位
+                },
+                {
+                    text: '校团委宣传部',
+                    value: '校团委宣传部',
+                    children: [
+                        { text: '宣传中心', value: '宣传中心' },
+                        { text: '百川讲堂中心', value: '百川讲堂中心' },
+                        { text: '新媒体工作室', value: '新媒体工作室' },
+                        { text: '摄影工作室', value: '摄影工作室' },
+                        { text: '短视频工作室', value: '短视频工作室' },
+                        { text: '平面设计工作室', value: '平面设计工作室' },
+                        { text: '凌越网络工作室', value: '凌越网络工作室' },
+                        { text: '光in凌晨影像工作室', value: '光in凌晨影像工作室' },
+                    ],
+                },
+                {
+                    text: '校团委实践部',
+                    value: '校团委实践部',
+                    children: [{ text: '', value: '' }],
+                },
+                {
+                    text: '校团委科创部',
+                    value: '校团委科创部',
+                    children: [{ text: '', value: '' }],
+                },
+                {
+                    text: '校团委社团管理部',
+                    value: '校团委社团管理部',
+                    children: [
+                        { text: '社团管理部', value: '社团管理部' },
+                        { text: '大学生艺术团', value: '大学生艺术团' },
+                    ],
+                },
+                {
+                    text: '校团委办公室',
+                    value: '校团委办公室',
+                    children: [{ text: '', value: '' }],
+                },
+            ],
+        })
         let roles = [
             { text: '本科生', value: '本科生' },
             { text: '研究生', value: '研究生' },
@@ -283,6 +328,9 @@ export default {
             .catch(() => {
                 showNotify({ type: 'danger', message: '无法获取报名批次，请联系管理员' })
             })
+
+        /* 
+         * 部门名称将采用静态方式直接生成
         axios
             .get('/enroll/getDepts')
             .then((response) => {
@@ -296,6 +344,8 @@ export default {
             .catch(() => {
                 showNotify({ type: 'danger', message: '无法获取部门名单，请联系管理员' })
             })
+
+        */
 
         let showFacultyPicker = ref(false)
         let showFirstChoicePicker = ref(false)
@@ -319,7 +369,7 @@ export default {
                 showNotify({ type: 'danger', message: '请选择至少一个志愿！' })
                 return
             }
-            
+
             signupForm.advantage = advantageGroupChecked.value.join(',')
             console.log(signupForm.advantage)
             // 注意，提交的数据与后端保持统一
@@ -424,15 +474,33 @@ export default {
             }
         }
         const onConfirmFirstChoice = ({ selectedOptions }) => {
-            signupForm.firstChoice = selectedOptions[0].value
+            let choice = ''
+            if (selectedOptions[1].value != '') {
+                choice = `${selectedOptions[0].value}(${selectedOptions[1].value})`
+            } else {
+                choice = selectedOptions[0].value
+            }
+            signupForm.firstChoice = choice
             showFirstChoicePicker.value = false
         }
         const onConfirmSecondChoice = ({ selectedOptions }) => {
-            signupForm.secondChoice = selectedOptions[0].value
+            let choice = ''
+            if (selectedOptions[1].value != '') {
+                choice = `${selectedOptions[0].value}(${selectedOptions[1].value})`
+            } else {
+                choice = selectedOptions[0].value
+            }
+            signupForm.secondChoice = choice
             showSecondChoicePicker.value = false
         }
         const onConfirmThirdChoice = ({ selectedOptions }) => {
-            signupForm.thirdChoice = selectedOptions[0].value
+            let choice = ''
+            if (selectedOptions[1].value != '') {
+                choice = `${selectedOptions[0].value}(${selectedOptions[1].value})`
+            } else {
+                choice = selectedOptions[0].value
+            }
+            signupForm.thirdChoice = choice
             showThirdChoicePicker.value = false
         }
 
