@@ -2,8 +2,7 @@
   <router-view></router-view>
   <div style="height: 5rem;"></div>
   <!--解决tabbar的遮盖内容问题-->
-  <van-tabbar route v-model="active">
-    <van-tabbar-item replace to="/" icon="photo-o">DIY祝福</van-tabbar-item>
+  <van-tabbar route v-model="active" v-show="showBar">
     <van-tabbar-item replace to="/postcard" icon="photo-o">元旦贺卡</van-tabbar-item>
     <van-tabbar-item replace to="/enroll" icon="friends-o">招新报名</van-tabbar-item>
   </van-tabbar>
@@ -11,13 +10,26 @@
 
 <script>
 import { ref, reactive } from 'vue'
+import { useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 
 export default {
   name: 'App',
   setup() {
     let active = ref(0)
     let showBar = ref(false)
-    
+    const router = useRouter()
+    const route = useRoute()
+
+    router.beforeEach((to, from) => {
+      document.title = to.meta.pageTitle
+      if(to.meta.showBar) {
+        showBar.value = true
+      }
+    })
+
+    console.log(route.path)
+  
 
     return {
       active,

@@ -6,15 +6,18 @@ import App from './App.vue'
 import '@vant/touch-emulator'
 import 'vant/lib/index.css'
 import { Lazyload } from 'vant'
+import { createPinia } from 'pinia'
+
+const pinia = createPinia()
 
 const app = createApp(App)
 app.use(VueAxios, axios)
+app.use(pinia)
 app.use(router)
-
 app.use(Lazyload)
 if(import.meta.env.DEV) {
-    axios.defaults.baseURL = 'http://127.0.0.1:5000/apivue'
-    // axios.defaults.baseURL = 'https://www.dutbit.com/apivue'
+    // axios.defaults.baseURL = 'http://127.0.0.1:5000/apivue'
+    axios.defaults.baseURL = 'https://www.dutbit.com/apivue'
     console.log('正处于开发模式下')
 } else {
     axios.defaults.baseURL = 'https://www.dutbit.com/apivue'

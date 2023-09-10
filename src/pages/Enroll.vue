@@ -2,9 +2,18 @@
     <van-notice-bar scrollable :text="noticeText" left-icon="volume-o"></van-notice-bar>
     <van-form @submit="onSubmit">
         <van-cell-group inset>
-            <van-field v-model="signupForm.name" name="name" label="姓名" placeholder="请输入姓名"
+            <van-field
+                v-model="signupForm.name"
+                name="name"
+                label="姓名"
+                placeholder="请输入姓名"
                 :rules="[{ required: true, message: '请输入姓名' }]" />
-            <van-field v-model="signupForm.stuId" name="stuId" label="学号" type="digit" placeholder="请输入学号"
+            <van-field
+                v-model="signupForm.stuId"
+                name="stuId"
+                label="学号"
+                type="digit"
+                placeholder="请输入学号"
                 :rules="[{ pattern: stuIdPattern, message: '请输入正确的学号' }]" />
             <van-field name="sex" label="性别">
                 <template #input>
@@ -14,29 +23,67 @@
                     </van-radio-group>
                 </template>
             </van-field>
-            <van-field v-model="signupForm.faculty" is-link readonly name="faculty" label="学院" placeholder="点击以选择学院"
+            <van-field
+                v-model="signupForm.faculty"
+                is-link
+                readonly
+                name="faculty"
+                label="学院"
+                placeholder="点击以选择学院"
                 @click="showFacultyPicker = true" />
             <van-popup v-model:show="showFacultyPicker" position="bottom">
-                <van-picker :columns="faculties" @confirm="onConfirmFaculty" @cancel="showFacultyPicker = false" />
+                <van-picker
+                    :columns="faculties"
+                    @confirm="onConfirmFaculty"
+                    @cancel="showFacultyPicker = false" />
             </van-popup>
-            <van-field v-model="signupForm.tel" name="tel" label="手机号" type="tel" placeholder="请输入手机号"
+            <van-field
+                v-model="signupForm.tel"
+                name="tel"
+                label="手机号"
+                type="tel"
+                placeholder="请输入手机号"
                 :rules="[{ pattern: telPattern, message: '请输入正确的手机号' }]" />
-            <van-field v-model="signupForm.firstChoice" is-link readonly name="firstChoice" label="第一志愿"
-                placeholder="请选择第一个申报部门" @click="firstChoiceHandler" />
+            <van-field
+                v-model="signupForm.firstChoice"
+                is-link
+                readonly
+                name="firstChoice"
+                label="第一志愿"
+                placeholder="请选择第一个申报部门"
+                @click="firstChoiceHandler" />
             <van-popup v-model:show="showFirstChoicePicker" position="bottom">
-                <van-picker :columns="depts.data" @confirm="onConfirmFirstChoice"
+                <van-picker
+                    :columns="depts.data"
+                    @confirm="onConfirmFirstChoice"
                     @cancel="showFirstChoicePicker = false" />
             </van-popup>
-            <van-field v-model="signupForm.secondChoice" is-link readonly name="secondChoice" label="第二志愿"
-                placeholder="请选择第二个申报部门" @click="secondChoiceHandler" />
+            <van-field
+                v-model="signupForm.secondChoice"
+                is-link
+                readonly
+                name="secondChoice"
+                label="第二志愿"
+                placeholder="请选择第二个申报部门"
+                @click="secondChoiceHandler" />
             <van-popup v-model:show="showSecondChoicePicker" position="bottom">
-                <van-picker :columns="depts.data" @confirm="onConfirmSecondChoice"
+                <van-picker
+                    :columns="depts.data"
+                    @confirm="onConfirmSecondChoice"
                     @cancel="showSecondChoicePicker = false" />
             </van-popup>
-            <van-field v-model="signupForm.thirdChoice" is-link readonly name="thirdChoice" label="第三志愿"
-                placeholder="请选择第三个申报部门" @click="thirdChoiceHandler" />
+            <van-field
+                v-model="signupForm.thirdChoice"
+                is-link
+                readonly
+                name="thirdChoice"
+                label="第三志愿"
+                placeholder="请选择第三个申报部门"
+                @click="thirdChoiceHandler" />
             <van-popup v-model:show="showThirdChoicePicker" position="bottom">
-                <van-picker :columns="depts.data" @confirm="onConfirmThirdChoice"
+                <van-picker
+                    :columns="depts.data"
+                    @confirm="onConfirmThirdChoice"
                     @cancel="showThirdChoicePicker = false" />
             </van-popup>
             <van-field name="allowAdjust" label="服从调剂">
@@ -44,22 +91,25 @@
                     <van-checkbox v-model="signupForm.allowAdjust" shape="square" />
                 </template>
             </van-field>
-            <van-field v-model="signupForm.info" rows="1" autosize label="个人简历" type="textarea"
+            <van-field
+                v-model="signupForm.info"
+                rows="1"
+                autosize
+                label="个人简历"
+                type="textarea"
                 placeholder="特长、社会工作经历等" />
         </van-cell-group>
         <div style="margin: 16px">
-            <van-button round block type="primary" native-type="submit">
-                提交
-            </van-button>
+            <van-button round block type="primary" native-type="submit"> 提交 </van-button>
         </div>
     </van-form>
     <p style="text-align: center; font-size: smaller">
-        &copy; 大连理工大学团委
+        &copy; 大连理工大学团委 凌越网络工作室
     </p>
 </template>
-  
+
 <script>
-import { showNotify, showConfirmDialog } from 'vant'
+import { showNotify, showConfirmDialog, Notify } from 'vant'
 import 'vant/es/dialog/style'
 import 'vant/es/notify/style'
 import axios from 'axios'
@@ -82,27 +132,35 @@ export default {
         })
         let noticeText = ref('')
         let currentTurn = reactive({ id: null, turnName: null, activated: null }) //当前报名批次的id和名称
-        let faculties = reactive([
-            '电子信息与电气工程学部',
-            '建设工程学部',
-            '人文与社会科学学部',
-            '运载工程与力学学部',
-            '材料科学与工程学院',
-            '光电工程与仪器科学学院',
-            '化工学院',
-            '环境学院',
-            '机械工程学院',
-            '建筑与艺术学院',
-            '经济管理学院',
-            '能源与动力学院',
-            '生物工程学院',
-            '数学科学学院',
-            '外国语学院',
-            '物理学院',
-            '张大煜学院',
-            '大连理工大学白俄罗斯国立大学联合学院',
-        ])
+        let faculties = reactive(
+            [
+                '电子信息与电气工程学部',
+                '建设工程学部',
+                '人文与社会科学学部',
+                '运载工程与力学学部',
+                '材料科学与工程学院',
+                '光电工程与仪器科学学院',
+                '化工学院',
+                '环境学院',
+                '机械工程学院',
+                '建筑与艺术学院',
+                '经济管理学院',
+                '能源与动力学院',
+                '生物工程学院',
+                '数学科学学院',
+                '外国语学院',
+                '物理学院',
+                '张大煜学院',
+                '大连理工大学白俄罗斯国立大学联合学院',
+            ].map((val) => {
+                return {
+                    text: val,
+                    value: val,
+                }
+            })
+        )
         let depts = reactive({ data: [] })
+
         axios
             .get('/enroll/getTurns')
             .then((response) => {
@@ -120,8 +178,7 @@ export default {
                     currentTurn.activated = turn.activated
                     currentTurn.turnName = turn.turnName
                     noticeText.value =
-                        '欢迎报名连理young媒体融合中心! 当前报名批次:' +
-                        currentTurn.turnName
+                        '欢迎报名大连理工大学团委! 当前报名批次:' + currentTurn.turnName
                 }
             })
             .catch(() => {
@@ -131,7 +188,10 @@ export default {
             .get('/enroll/getDepts')
             .then((response) => {
                 depts.data = response.data.depts.map((p) => {
-                    return p.deptName
+                    return {
+                        text: p.deptName,
+                        value: p.deptName,
+                    }
                 })
             })
             .catch(() => {
@@ -175,7 +235,7 @@ export default {
                 info: {
                     name: signupForm.name,
                     stuId: signupForm.stuId,
-                    turnId: currentTurn.id
+                    turnId: currentTurn.id,
                 },
             }
             const submitForm = () => {
@@ -217,8 +277,8 @@ export default {
                 }
             })
         }
-        const onConfirmFaculty = (value) => {
-            signupForm.faculty = value
+        const onConfirmFaculty = ({ selectedOptions }) => {
+            signupForm.faculty = selectedOptions[0].value
             showFacultyPicker.value = false
         }
         const firstChoiceHandler = () => {
@@ -228,26 +288,26 @@ export default {
             if (signupForm.firstChoice) {
                 showSecondChoicePicker.value = true
             } else {
-                Notify({ type: 'danger', message: '请先选择第一志愿' })
+                showNotify({ type: 'danger', message: '请先选择第一志愿' })
             }
         }
         const thirdChoiceHandler = () => {
             if (signupForm.firstChoice && signupForm.secondChoice) {
                 showThirdChoicePicker.value = true
             } else {
-                Notify({ type: 'danger', message: '请先选择第一或第二志愿' })
+                showNotify({ type: 'danger', message: '请先选择第一或第二志愿' })
             }
         }
-        const onConfirmFirstChoice = (value) => {
-            signupForm.firstChoice = value
+        const onConfirmFirstChoice = ({ selectedOptions }) => {
+            signupForm.firstChoice = selectedOptions[0].value
             showFirstChoicePicker.value = false
         }
-        const onConfirmSecondChoice = (value) => {
-            signupForm.secondChoice = value
+        const onConfirmSecondChoice = ({ selectedOptions }) => {
+            signupForm.secondChoice = selectedOptions[0].value
             showSecondChoicePicker.value = false
         }
-        const onConfirmThirdChoice = (value) => {
-            signupForm.thirdChoice = value
+        const onConfirmThirdChoice = ({ selectedOptions }) => {
+            signupForm.thirdChoice = selectedOptions[0].value
             showThirdChoicePicker.value = false
         }
         return {
@@ -273,8 +333,5 @@ export default {
     },
 }
 </script>
-  
-<style scoped>
 
-</style>
-  
+<style scoped></style>
