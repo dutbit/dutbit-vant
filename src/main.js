@@ -16,8 +16,8 @@ app.use(pinia)
 app.use(router)
 app.use(Lazyload)
 if(import.meta.env.DEV) {
-    // axios.defaults.baseURL = 'http://127.0.0.1:5000/apivue'
-    axios.defaults.baseURL = 'https://www.dutbit.com/apivue'
+    axios.defaults.baseURL = 'http://127.0.0.1:5000/apivue'
+    // axios.defaults.baseURL = 'https://www.dutbit.com/apivue'
     console.log('正处于开发模式下')
 } else {
     axios.defaults.baseURL = 'https://www.dutbit.com/apivue'
